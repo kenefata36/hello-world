@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Flotaing Game On Car Drive</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+<style>
+  *{
+    font-family: "Open Sans", sans-serif;
+}
+#main-car-seat{
+  position: fixed;
+   display: flex;
+  align-items: center;
+  justify-content: left;
+  height: 100vh;
+  margin: 0;
+  z-index: 350;
+}
+.car-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  overflow: scroll;
+  height: 350px;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.seat {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.seat.driver {
+  background-color: #28a745;
+}
+.passenger-player {
+  background-color: #ff9900;
+} 
+.seat.rear {
+  background-color: #17a2b8;
+}
+button {
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9f9f9;
+  margin: 5px 0;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+li button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+li button:hover {
+  background-color: #a71d2a;
+}
+</style>
+</head>
+<body>
+     <div id="main-car-seat">
+      <div class="car-layout">
+    <center><h2>SEAT CAR PLAYER</h2></center>
+    <div class="row">
+      <div class="seat passenger-player">PASSENGER</div>
+      <div class="seat driver">DRIVER</div>
+    </div>
+    <div class="row">
+      <div class="seat rear left-player">SEAT PLAYER</div>
+      <div class="seat rear center-player">SEAT PLAYER</div>
+    </div>
+    <div class="row">
+        <div class="seat rear Right-player">SEAT PLAYER</div>
+      <div class="seat rear content-player">SEAT PLAYER</div>
+    </div>
+    <p style="color: lime;">Your Driver, To Use steerings and transmission</p>
+    <center><p>List: <span id="nameCount">1</span>/6</p></center>
+    <div id="message-seat-red" style="color: red;"></div>
+    Note:
+    The Players online are green seat and Passenger. this passenger on join cannot be to passenger view
+    This Empty Player or left the game are Blue seat.
+    Maximum 5/5 lists Players In the car load, Players Not enough car load exceeding 6/5 - 10/5 can cause your car to be difficult to move and lagging.
+    <br>
+     <input class="input-text" type="text" id="nameInput" placeholder="Add Player/Mobs">
+    <button class="button" id="addButton" onclick="setTimeout(switchtocase, 500)">Add/Joining Player</button>
+    <ul id="nameList">
+        <li>Your Player Drive<p style="color: green;">Driver</p></li>
+    </ul> 
+    <hr>
+    <h2>BINNER FOR CARS</h2>
+    <input id="hornBtn" type="button" value="Horn" name="horncar (Press to Long button)">
+    <label for="horncar">HornCar</label>
+    <nav><button id="navbutton" onclick="document.getElementById('basuri1').play()">Basuri 1</button> <button id="navbutton" onclick="document.getElementById('basuri2').play()">Basuri 2</button></nav>
+    <nav><button id="navbutton" onclick="document.getElementById('basuri3').play()">Basuri 3</button> <button id="navbutton" onclick="document.getElementById('basuri4').play()">Basuri 4</button></nav>
+    <center><h4>Arrow car</h4></center>
+   <!-- Indicator Button -->
+<button id="indicator" class="indicator-btn">&#8594;</button>
+
+<!-- Audio (replace with your own sound file) -->
+<audio id="indicatorSound" preload="auto">
+    <source src="https://androiddevhub.com/uploads/6932f48265f4f.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+</audio>
+  </div>
+  <audio id="hornSound" src="https://androiddevhub.com/uploads/6932f37d87ff6.mp3"></audio>
+  <audio src="https://androiddevhub.com/uploads/6932f3281e0fa.mp3" id="basuri2"></audio>
+  <audio src="https://androiddevhub.com/uploads/6932f3c3d441f.mp3" id="basuri3"></audio>
+  <audio src="https://github.com/kenefata36/Car-Seater-Generate-With-Sound/blob/main/basuri-2.mp3" id="basuri4"></audio>
+  <audio src="https://androiddevhub.com/uploads/6932f3fee4bf7.mp3" id="basuri1"></audio>
+  <script>
+    const nameInput = document.getElementById('nameInput');
+const addButton = document.getElementById('addButton');
+const nameList = document.getElementById('nameList');
+const nameCount = document.getElementById('nameCount');
+
+let totalNames = 1;
+
+function switchtocase() {
+    switch (totalNames) {
+        case 1:
+      document.querySelector(".passenger-player").style.backgroundColor = "#17a2b8"; //Player Enter
+            break;
+        case 2:
+      document.querySelector(".passenger-player").style.backgroundColor = "#28a745"; //Player Enter
+            document.querySelector(".center-player").style.backgroundColor = "#17a2b8"; //Passenger left the games
+            break;
+    case 3:
+document.querySelector(".center-player").style.backgroundColor = "#28a745"; //Player Enter
+            document.querySelector(".Right-player").style.backgroundColor = "#17a2b8"; //Player left the games
+    break;
+     case 4:
+ document.querySelector(".Right-player").style.backgroundColor = "#28a745"; //Passengers Enter
+            document.querySelector(".left-player").style.backgroundColor = "#17a2b8"; //Passenger left the games
+    break;
+     case 5:
+document.querySelector(".left-player").style.backgroundColor = "#28a745"; //Passengers Enter
+document.querySelector(".content-player").style.backgroundColor = "#17a2b8"; //Passengers Enter
+    break;
+     case 6:
+document.querySelector(".content-player").style.backgroundColor = "#28a745"; //Passengers Enter
+
+    break;
+        default:
+            alert("Warning: If you Players loads exceedes to car may causes difficults or lagging.");
+            console.warn("WARNING: If you Players loads exceedes to car may causes difficults or lagging.");
+            document.getElementById('message-seat-red').textContent = 'Not enough Seats in the Car chair Game. if car causing difficults and weightness.';
+            break;
+    }
+}
+// Function to update the name count
+function updateNameCount() {
+  nameCount.textContent = totalNames;
+}
+// Function to add a name to the list
+addButton.addEventListener('click', () => {
+  const name = nameInput.value.trim();
+  if (name) {
+    const li = document.createElement('li');
+    li.textContent = name;
+
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'X';
+    deleteButton.addEventListener('click', () => {
+      nameList.removeChild(li);
+      totalNames--;
+      updateNameCount();
+      //switch
+      switchtocase();
+    });
+
+    li.appendChild(deleteButton);
+    nameList.appendChild(li);
+
+    totalNames++;
+    updateNameCount();
+    nameInput.value = '';
+  }
+});
+
+alert("Use Phone to Floating App in a Game.");
+// Get button and audio elements
+    const hornBtn = document.getElementById('hornBtn');
+    const hornSound = document.getElementById('hornSound');
+
+   // Ensure the sound loops while pressed
+    hornSound.loop = true;
+
+    // Play sound when button is pressed
+    function startHorn() {
+        hornSound.currentTime = 0; // restart from beginning
+        hornSound.play().catch(err => console.error("Audio play failed:", err));
+    }
+
+    // Stop sound when button is released
+    function stopHorn() {
+        hornSound.pause();
+        hornSound.currentTime = 0;
+    }
+
+    // Mouse events
+    hornBtn.addEventListener('mousedown', startHorn);
+    hornBtn.addEventListener('mouseup', stopHorn);
+    hornBtn.addEventListener('mouseleave', stopHorn);
+
+    // Touch events (for mobile)
+    hornBtn.addEventListener('touchstart', e => {
+        e.preventDefault(); // prevent scrolling
+        startHorn();
+    });
+    hornBtn.addEventListener('touchend', stopHorn);
+  </script>
+  <script>
+    const btn = document.getElementById('indicator');
+    const sound = document.getElementById('indicatorSound');
+    let isPlaying = false;
+
+    btn.addEventListener('click', () => {
+        if (!isPlaying) {
+            // Start blinking and play sound in loop
+            btn.classList.add('blinking');
+            sound.currentTime = 0;
+            sound.loop = true;
+            sound.play().catch(err => console.error("Audio play error:", err));
+            isPlaying = true;
+        } else {
+            // Stop blinking and sound
+            btn.classList.remove('blinking');
+            sound.pause();
+            isPlaying = false;
+        }
+    });
+  </script>
+</body>
+
+</html>
